@@ -9,6 +9,6 @@ body{
     display: inline-block;
 }
 .msg{
-    background-color: rgba(0, 255, 255, 0.316);
-    color: whitesmoke;
+    background-color: rgba(0, 255, 255, 0.796);
+    color: rgba(0, 0, 0, 0.548)
 }

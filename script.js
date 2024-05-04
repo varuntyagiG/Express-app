@@ -3,11 +3,14 @@ const mongoose = require('mongoose');
 const app = express();
 const path = require('path');
 const Chat = require('./models/chats.js');
+const methodOverride = require("method-override");
+
 
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'/views'));
 app.use(express.static(path.join(__dirname,'public')));     // this is used to connect public(style.css) file to index.ejs
 app.use(express.urlencoded({extended : true}));
+app.use(methodOverride("_method"));
 
 
 let port = 8080;
@@ -72,6 +75,26 @@ app.post('/chats',(req,res)=>{
     });
     res.redirect('/chats');
 });
+
+//edit route
+app.get('/chats/:id/edit',async (req,res)=>{
+    let {id} = req.params;
+    let chatf = await Chat.findById(id);      // async function banana padegha kyuki database k under search karna asyronous nature hotta h.
+    console.log(chatf);
+    res.render('edit.ejs',{chatf});
+})
+
+// update route
+app.put('/chats/:id',async (req,res)=>{
+    let {id} = req.params;
+    let {mssege : newmsg} = req.body;
+    let updatedchat = await Chat.findByIdAndUpdate(id,{mssege: newmsg},{runValidators : true , new : true});
+    console.log(updatedchat);
+    res.redirect("/chats");
+});
+
+
+
 
 
 
