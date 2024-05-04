@@ -91,7 +91,8 @@ app.put('/chats/:id',async (req,res)=>{
     let updatedchat = await Chat.findByIdAndUpdate(id,{mssege: newmsg},{runValidators : true , new : true});
     console.log(updatedchat);
     res.redirect("/chats");
-});
+})
+
 
 
 
