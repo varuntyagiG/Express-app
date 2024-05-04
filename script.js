@@ -93,6 +93,7 @@ app.put('/chats/:id',async (req,res)=>{
     res.redirect("/chats");
 })
 
+// delete route
 app.delete("/chats/:id",async (req,res)=>{
     let {id} = req.params;
     console.log(id);
