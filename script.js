@@ -93,7 +93,13 @@ app.put('/chats/:id',async (req,res)=>{
     res.redirect("/chats");
 })
 
-
+app.delete("/chats/:id",async (req,res)=>{
+    let {id} = req.params;
+    console.log(id);
+    let deletedchat =  await Chat.findByIdAndDelete(id);
+    console.log(deletedchat);
+    res.redirect("/chats");
+});
 
 
 
