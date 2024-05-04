@@ -48,8 +48,8 @@ app.get('/',(req,res)=>{
 
 // index route
 
-app.get('/chats',async (req,res)=>{
-    let chats = await Chat.find();
+app.get('/chats',async(req,res)=>{
+    let chats = await Chat.find();           // to print all the chats on web-page
     console.log(chats);
     res.render('index.ejs',{chats});
 });
@@ -101,12 +101,6 @@ app.delete("/chats/:id",async (req,res)=>{
     console.log(deletedchat);
     res.redirect("/chats");
 });
-
-
-
-
-
-
 
 
 

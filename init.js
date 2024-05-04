@@ -13,7 +13,7 @@ main().then((res)=>{
 
 const chat1 = new Chat({
     from : 'Varun',
-    to : 'Anjali',
+    to : 'Anjali',                           // this file is used to store data in database...
     mssege : 'Hey! How are you ?',
     created_at : new Date()
 });
