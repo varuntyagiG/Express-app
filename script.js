@@ -1,7 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-var cookieParser = require('cookie-parser');
-const bcrypt = require('bcrypt');
+var cookieParser = require("cookie-parser");
+const bcrypt = require("bcrypt");
 const jwtPassword = "1234567";
 const mongoose = require("mongoose");
 const app = express();
@@ -24,7 +24,6 @@ app.listen(port, () => {
   console.log("listen along the port 8080");
 });
 
-
 async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/whatsapp");
 }
@@ -39,11 +38,12 @@ main()
 app.get("/page", (req, res) => {
   res.render("page.ejs");
 });
+
 // sign up
 app.post("/signup", function (req, res) {
   let { email, password, username } = req.body;
-  bcrypt.genSalt(10, function(err, salt) {
-    bcrypt.hash(password, salt, function(err, hash) {
+  bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash(password, salt, function (err, hash) {
       const data = new User({
         email: email,
         password: hash,
@@ -51,49 +51,50 @@ app.post("/signup", function (req, res) {
       });
       data.save();
       console.log(data);
-      let token = jwt.sign({email},"hii");
-      res.cookie("token",token);
-      console.log(token);
+      let token = jwt.sign({ email }, "hii");
+      res.cookie("token", token);
       res.redirect("/chats");
     });
-});
+  });
 });
 
 // login
-app.get("/login",(req,res)=>{
-   res.render("login.ejs");
+app.get("/login", (req, res) => {
+  res.render("login.ejs");
 });
 
-app.post("/authentication",async (req,res)=>{
-  let {email , password} = req.body;
-  let detail = await User.findOne({email});
-  if(!detail) return res.json({
-    message : "some thing went wrong"
-  })
-   bcrypt.compare(req.body.password, detail.password,function (err,result){
-    if(result){
-      let token = jwt.sign({email},"Hii");
-      res.cookie("token",token);
-      res.send(token);
-    }else{
-      res.send("some thing went wrong");
+app.post("/authentication", async (req, res) => {
+  let { email, password } = req.body;
+  let detail = await User.findOne({ email });
+  if (!detail)
+    return res.json({
+      message: "something went wrong",
+    });
+  bcrypt.compare(req.body.password, detail.password, function (err, result) {
+    // result is either true or false
+    if (result) {
+      let token = jwt.sign({ email }, "Hii");
+      res.cookie("token", token);
+      res.redirect("/chats");
+    } else {
+      res.json({
+        mesage: "something went wrong",
+      });
     }
-   })
-  }
-); // pass in req.body automatic convert in hashed form and compare with detail password
+  });
+}); // pass in req.body automatic convert in hashed form and compare with detail password
 
-app.get("/users",(req,res)=>{
+app.get("/users", (req, res) => {
   let token = req.cookies.token;
-  let decoded = jwt.verify(token,"Hii");
+  let decoded = jwt.verify(token, "Hii");
   res.send(decoded);
-})
-
+});
 
 // log-out route
-app.get("/logout",(req,res)=>{
-    res.cookie("token","");
-    res.redirect("/page");
-})
+app.get("/logout", (req, res) => {
+  res.cookie("token", "");
+  res.redirect("/page");
+});
 
 // index route
 
