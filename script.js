@@ -87,16 +87,15 @@ app.post("/authentication", async (req, res) => {
 // index route
 app.get("/user", (req, res) => {
   let token = req.cookies.token;
-  let decoded = jwt.verify(token, "Hii");  // jo data hamne jwt.sign k time dala tha vo mile gha 
+  let decoded = jwt.verify(token, "Hii"); // jo data hamne jwt.sign k time dala tha vo mile gha
   let email = decoded.email;
   if (decoded.email === email) {
     res.json({
       decoded,
-      email
-  })
+      email,
+    });
   }
-  }
-);
+});
 
 // log-out route
 app.get("/logout", (req, res) => {
@@ -165,4 +164,11 @@ app.delete("/chats/:id", async (req, res) => {
   let deletedchat = await Chat.findByIdAndDelete(id);
   console.log(deletedchat);
   res.redirect("/chats");
+});
+
+// custom error handlor
+app.use((err, req, res, next) => {
+  res.status(500).json({
+    message: "server side error",
+  });
 });
