@@ -84,11 +84,19 @@ app.post("/authentication", async (req, res) => {
   });
 }); // pass in req.body automatic convert in hashed form and compare with detail password
 
-app.get("/users", (req, res) => {
+// index route
+app.get("/user", (req, res) => {
   let token = req.cookies.token;
-  let decoded = jwt.verify(token, "Hii");
-  res.send(decoded);
-});
+  let decoded = jwt.verify(token, "Hii");  // jo data hamne jwt.sign k time dala tha vo mile gha 
+  let email = decoded.email;
+  if (decoded.email === email) {
+    res.json({
+      decoded,
+      email
+  })
+  }
+  }
+);
 
 // log-out route
 app.get("/logout", (req, res) => {
